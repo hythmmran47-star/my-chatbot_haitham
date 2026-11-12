@@ -1,33 +1,53 @@
-# Chatbot Medical - Local (FastAPI + SQLite) - Arabic UI
+# Medical Learning Chatbot | Arabic
 
-## المتطلبات
-- Python 3.10+ مثبت
-- Visual Studio (أو Visual Studio Code). الإرشادات هنا تشتغل في بيئة Python داخل Visual Studio أيضاً.
+An Arabic-first educational chatbot prototype for medical-learning questions, built with FastAPI, SQLAlchemy, SQLite, and a server-side Gemini integration.
 
-## تشغيل محلي (خطوات)
-1. افتح المشروع في Visual Studio.
-2. افتح Terminal في المجلد الجذري (حيث requirements.txt).
-3. أنشئ بيئة افتراضية:
-   - Windows:
-     python -m venv venv
-     venv\Scripts\activate
-4. ثبّت الحزم:
-     pip install -r requirements.txt
-5. (اختياري) ضع المفتاح الخاص بـ Gemini في متغير بيئة:
-   - Windows (PowerShell):
-     $env:GEMINI_API_KEY="PUT_YOUR_KEY"
-   - لاحقاً ستغيّرون هذا لتخزين آمن أكثر.
-   ملاحظة: إن لم تضعوا المفتاح، سيعمل النظام في وضع الـ mock تلقائيًا.
-6. شغّل التطبيق:
-     uvicorn app.main:app --reload
-7. افتح المتصفح وادخل:
-     http://127.0.0.1:8000/
-8. اختبار:
-   - جربوا سؤالاً طبيًا (مثال: "ما هي أعراض التهاب الرئة؟") وسيُرد برد تجريبي.
-   - إن سألتم سؤالاً خارج الطب سيُرفض برفق: "أستطيع الإجابة فقط على الأسئلة الطبية..."
+## Current Features
 
-## ملاحظات مهمة
-- الفلترة الطبية الآن تعتمد على قائمة كلمات (قابلة للتوسيع في app/utils.py).
-- لتفعيل استدعاء حقيقي لـ Gemini: عدّلوا دالة call_gemini في app/utils.py واتّبعوا وثائق Google الرسمية لوضع الـ endpoint وطريقة الطلب.
-- لا تضعوا مفتاح الـ API في الكلاينت أو في الكود؛ استعملوا متغيرات بيئة أو secret manager.
+- Arabic chat interface.
+- FastAPI endpoint for submitting questions.
+- SQLite persistence through SQLAlchemy.
+- Conversation history retrieval by session ID.
+- Server-side generative AI integration through an environment variable.
+- Static HTML, CSS, and JavaScript frontend.
 
+## Technology
+
+Python 3.10+, FastAPI, Uvicorn, SQLAlchemy, SQLite, Pydantic, python-dotenv, Google Generative AI SDK, HTML, CSS, and JavaScript.
+
+## Run Locally
+
+1. Create and activate a virtual environment:
+
+   ```powershell
+   py -m venv .venv
+   .\.venv\Scripts\Activate.ps1
+   ```
+
+2. Install dependencies:
+
+   ```powershell
+   pip install -r requirements.txt
+   ```
+
+3. Copy `.env.example` to `.env` and set `GOOGLE_API_KEY`.
+4. Start from the repository root:
+
+   ```powershell
+   uvicorn app.main:app --reload
+   ```
+
+5. Open `http://127.0.0.1:8000`.
+
+## Environment Variables
+
+| Variable | Purpose |
+|---|---|
+| `GOOGLE_API_KEY` | Private server-side API key. Never commit it. |
+| `GEMINI_MODEL` | Optional model identifier; defaults to `gemini-1.5-flash`. |
+
+## Security and Limitations
+
+This is a learning prototype, not a medical device and not a substitute for qualified medical care. Do not enter real patient data. Before public deployment, implement authentication, authorization and ownership checks for chat sessions, request validation, rate limits, secure data retention, and privacy controls. The current history endpoint accepts a session ID without verifying the requesting user's ownership.
+
+The former committed API key must be revoked in Google AI Studio or Google Cloud. Removing it from current files does not erase it from old Git commits; rotate the key and clean Git history before considering the repository sanitized.
